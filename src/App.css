@@ -1,0 +1,307 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+/* ==========================================
+   1. VARIABLES Y RESETEO
+   ========================================== */
+:root {
+  --color-orange: #e8702a;
+  --color-blue-active: #2b7af1;
+  --color-blue-bg: #eaf3ff;
+  --color-text-dark: #1f2937;
+  --color-text-muted: #6b7280;
+  --color-bg-app: #f3f4f6;
+  --color-bg-card: #ffffff;
+  --color-btn-default: #f0f2f5;
+  --color-btn-hover: #e4e6eb;
+  --color-whatsapp: #25d366;
+  --color-whatsapp-hover: #1fba59;
+  --color-nav-bg: #a8b0b9;
+  --color-nav-disabled: #d1d5db;
+  
+  --radius-card: 28px;
+  --radius-btn: 14px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  background-color: var(--color-bg-app);
+  color: var(--color-text-dark);
+}
+
+/* ==========================================
+   2. CONTENEDOR PRINCIPAL
+   ========================================== */
+.app-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.wizard-card {
+  width: 100%;
+  max-width: 480px;
+  background: var(--color-bg-card);
+  border: 3px solid #111111;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  min-height: 600px;
+}
+
+.wizard-header {
+  padding: 24px 20px 16px;
+  text-align: center;
+  background: var(--color-bg-card);
+}
+
+.wizard-header h1 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--color-text-dark);
+  margin-bottom: 6px;
+}
+
+.wizard-header p {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  line-height: 1.3;
+}
+
+/* ==========================================
+   3. BANNERS Y SECCIONES
+   ========================================== */
+.step-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.banner-orange {
+  background-color: var(--color-orange);
+  color: #ffffff;
+  padding: 16px 20px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.banner-orange h2 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.banner-orange span {
+  font-size: 0.85rem;
+  opacity: 0.95;
+  font-weight: 400;
+}
+
+/* ==========================================
+   4. GRILLAS PRINCIPALES
+   ========================================== */
+.grid-3-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 24px 20px; }
+.grid-1-col { display: grid; grid-template-columns: 1fr; gap: 12px; padding: 24px 20px; }
+
+.option-btn {
+  background-color: var(--color-btn-default);
+  border: 2px solid transparent;
+  border-radius: var(--radius-btn);
+  padding: 16px 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text-dark);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.option-btn:hover { background-color: var(--color-btn-hover); }
+
+.option-btn.is-selected {
+  background-color: var(--color-blue-bg);
+  border-color: var(--color-blue-active);
+  color: var(--color-blue-active);
+}
+
+.btn-large { padding: 18px 16px; }
+.btn-title { font-size: 1.05rem; margin-bottom: 4px; }
+.btn-subtitle { font-size: 0.82rem; color: var(--color-text-muted); font-weight: 400; }
+.option-btn.is-selected .btn-subtitle { color: var(--color-blue-active); }
+.btn-price { font-size: 1.1rem; font-weight: 800; color: var(--color-orange); margin: 4px 0; }
+.btn-desc { font-size: 0.78rem; color: var(--color-text-muted); font-weight: 400; line-height: 1.2; }
+
+/* ==========================================
+   5. RESUMEN Y DESGLOSE DE PRECIOS
+   ========================================== */
+.summary-box {
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Nueva caja tipo recibo */
+.summary-breakdown {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  color: var(--color-text-dark);
+}
+
+.breakdown-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 2px dashed #cbd5e1;
+  padding-top: 12px;
+  margin-top: 4px;
+}
+
+.breakdown-total span {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--color-text-dark);
+}
+
+.breakdown-total .total-number {
+  font-size: 1.6rem;
+  color: var(--color-orange);
+  font-weight: 900;
+}
+
+.hourly-note {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* Área de los formatos y horarios (Chips) */
+.summary-options {
+  border-top: 2px solid #e5e7eb;
+  padding-top: 16px;
+}
+
+.options-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-text-dark);
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.option-group { margin-bottom: 16px; }
+
+.option-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-bottom: 8px;
+}
+
+.chips-container { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.chip-btn {
+  background-color: var(--color-btn-default);
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-text-dark);
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-grow: 1;
+  text-align: center;
+}
+
+.chip-btn.is-selected {
+  background-color: var(--color-blue-bg);
+  border-color: var(--color-blue-active);
+  color: var(--color-blue-active);
+}
+
+/* Botón WhatsApp */
+.btn-whatsapp {
+  background-color: #a8b0b9;
+  color: #ffffff;
+  border: none;
+  border-radius: 50px;
+  padding: 16px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: not-allowed;
+  transition: all 0.3s ease;
+  margin-top: 4px;
+}
+
+.btn-whatsapp.ready {
+  background-color: var(--color-whatsapp);
+  cursor: pointer;
+  font-size: 1.05rem;
+  box-shadow: 0 6px 16px rgba(37, 211, 102, 0.25);
+}
+
+.btn-whatsapp.ready:hover {
+  background-color: var(--color-whatsapp-hover);
+  transform: scale(1.02);
+}
+
+/* ==========================================
+   6. FOOTER NAVEGACIÓN
+   ========================================== */
+.wizard-footer { display: flex; border-top: 3px solid #111111; margin-top: auto; }
+.nav-arrow {
+  flex: 1; background-color: var(--color-nav-bg); color: #ffffff; border: none;
+  padding: 14px 0; font-size: 2rem; font-weight: 300; line-height: 1; cursor: pointer; transition: background-color 0.2s;
+}
+.nav-arrow:first-child { border-right: 2px solid #ffffff; }
+.nav-arrow:hover:not(:disabled) { background-color: #8f98a3; }
+.nav-arrow:disabled { background-color: var(--color-nav-disabled); color: #f3f4f6; cursor: not-allowed; }
+
+.range-info-box {
+  background-color: #fff3cd; /* Un tono amarillo suave */
+  border: 1px solid #ffeeba;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  color: #856404;
+  font-size: 0.9rem;
+}
+
+.range-info-box p {
+  margin: 5px 0;
+  font-weight: 600;
+}
+/* ==========================================
+   7. ANIMACIONES
+   ========================================== */
+.fade-in { animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
