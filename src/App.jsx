@@ -1,7 +1,9 @@
+// src/App.jsx
 import { usePricingCalculator } from './hooks/usePricingCalculator';
 import WizardHeader from './components/WizardHeader';
 import StepIdioma from './components/StepIdioma';
 import StepModalidad from './components/StepModalidad';
+import StepFormato from './components/StepFormato';
 import StepPlan from './components/StepPlan';
 import StepResumen from './components/StepResumen';
 import WizardFooter from './components/WizardFooter';
@@ -19,8 +21,8 @@ function App() {
     isWhatsAppReady,
     handleSelectIdioma,
     handleSelectModalidad,
-    handleSelectPlan,
     handleSelectFormato,
+    handleSelectPlan,
     handleSelectHorario,
     handleNext,
     handlePrev,
@@ -72,20 +74,28 @@ function App() {
         )}
 
         {step === 2 && (
+          <StepFormato 
+            dataModalidad={dataModalidad} 
+            selectedFormato={selections.formato} 
+            onSelectFormato={handleSelectFormato} 
+          />
+        )}
+
+        {step === 3 && (
           <StepPlan 
             dataModalidad={dataModalidad} 
+            selectedFormato={selections.formato}
             selectedPlan={selections.plan} 
             onSelectPlan={handleSelectPlan} 
           />
         )}
 
-        {step === 3 && (
+        {step === 4 && (
           <StepResumen 
             dataIdioma={dataIdioma}
             dataModalidad={dataModalidad}
             selections={selections}
             isWhatsAppReady={isWhatsAppReady}
-            onSelectFormato={handleSelectFormato}
             onSelectHorario={handleSelectHorario}
             onEnviarWhatsApp={enviarWhatsApp}
           />

@@ -1,13 +1,28 @@
+// src/components/StepResumen.jsx
 export default function StepResumen({
   dataIdioma,
   dataModalidad,
   selections,
   isWhatsAppReady,
-  onSelectFormato,
   onSelectHorario,
   onEnviarWhatsApp,
 }) {
   if (!dataIdioma || !selections.plan) return null;
+
+  const plan = selections.plan;
+  const esPromo = plan.enPromocion === true || plan.enPromocion === 'TRUE' || plan.enPromocion === 'true';
+  const esPorHora = plan.esPorHora === 'TRUE' || plan.esPorHora === true;
+
+  const primeraCuota = esPromo
+    ? Number(plan.primeraCuotaPromo || 0)
+    : Number(plan.primeraCuotaRegular || (dataIdioma.matricula + plan.cuotaMontoRegular));
+
+  const cuotaMensual = esPromo
+    ? Number(plan.cuotaMontoPromo || 0)
+    : Number(plan.cuotaMontoRegular || 0);
+
+  const totalCuotas = Number(plan.cuotasCantidad || 1);
+  const cuotasRestantes = totalCuotas - 1;
 
   return (
     <section className="step-container fade-in">
@@ -16,49 +31,68 @@ export default function StepResumen({
         style={{ backgroundColor: dataIdioma.colorTema || '#e8702a' }}
       >
         <h2>TU COTIZACIÓN</h2>
-        <span>{dataIdioma.nombre} - {dataModalidad?.nombre}</span>
+        <span>{dataIdioma.nombre} - {dataModalidad?.nombre} ({selections.formato})</span>
       </div>
       
       <div className="summary-box">
+        {esPromo && plan.etiquetaPromo && (
+          <div className="promo-badge" style={{ marginBottom: '12px', textAlign: 'center' }}>
+            <span style={{ 
+              backgroundColor: '#d52b1e', 
+              color: '#fff', 
+              padding: '4px 12px', 
+              borderRadius: '12px', 
+              fontWeight: 'bold',
+              fontSize: '0.85rem'
+            }}>
+              🔥 Promoción Activa: {plan.etiquetaPromo}
+            </span>
+          </div>
+        )}
+
         <div className="summary-breakdown">
-          <div className="breakdown-row">
-            <span>Matrícula Única:</span>
-            <strong>Bs. {dataIdioma.matricula}</strong>
-          </div>
-          <div className="breakdown-row">
-            <span>{selections.plan.nombre}:</span>
-            <strong>Bs. {selections.plan.precio} {selections.plan.esPorHora ? '/ hora' : ''}</strong>
-          </div>
-          <div className="breakdown-total">
-            <span>Total a Invertir:</span>
-            <strong className="total-number">Bs. {dataIdioma.matricula + selections.plan.precio}</strong>
-          </div>
-          {selections.plan.esPorHora && (
-            <small className="hourly-note">* El total referencial incluye matrícula más 1 hora base.</small>
+          {esPorHora ? (
+             <>
+               <div className="breakdown-row">
+                 <span>1ª Cuota (Matrícula + 1 Hora base):</span>
+                 <strong>Bs. {primeraCuota}</strong>
+               </div>
+               
+               <div className="breakdown-total" style={{ borderTop: '2px dashed #e5e7eb', paddingTop: '10px', marginTop: '10px' }}>
+                 <span>Total para empezar hoy:</span>
+                 <strong className="total-number" style={{ color: '#0e0ead' }}>Bs. {primeraCuota}</strong>
+               </div>
+             </>
+          ) : (
+             <>
+               <div className="breakdown-row">
+                 <span>1ª Cuota (Inscripción + 1er Mes):</span>
+                 <strong>Bs. {primeraCuota}</strong>
+               </div>
+               
+               {cuotasRestantes > 0 && (
+                 <div className="breakdown-row">
+                   <span>Siguientes {cuotasRestantes} cuotas:</span>
+                   <strong>Bs. {cuotaMensual} / mes</strong>
+                 </div>
+               )}
+
+               <div className="breakdown-total" style={{ borderTop: '2px dashed #e5e7eb', paddingTop: '10px', marginTop: '10px' }}>
+                 <span>Total para empezar hoy:</span>
+                 <strong className="total-number" style={{ color: '#0e0ead' }}>Bs. {primeraCuota}</strong>
+               </div>
+             </>
+          )}
+
+          {esPorHora && (
+            <small className="hourly-note">* El total referencial incluye matrícula más 1 hora base de clases.</small>
           )}
         </div>
 
         <div className="summary-options">
-          <h3 className="options-title">Detalles finales para tu inscripción:</h3>
+          <h3 className="options-title">Selecciona tu horario:</h3>
           
           <div className="option-group">
-            <label>1. Elige tu formato:</label>
-            <div className="chips-container">
-              {dataModalidad?.formatos.map(fmt => (
-                <button 
-                  key={fmt} 
-                  type="button"
-                  className={`chip-btn ${selections.formato === fmt ? 'is-selected' : ''}`}
-                  onClick={() => onSelectFormato(fmt)}
-                >
-                  {fmt}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="option-group">
-            <label>2. Horario:</label>
             {selections.modalidad === 'onetoone' ? (
               <div className="range-info-box">
                 <strong>Rangos disponibles:</strong>
@@ -88,7 +122,7 @@ export default function StepResumen({
           onClick={onEnviarWhatsApp}
           disabled={!isWhatsAppReady}
         >
-          {isWhatsAppReady ? 'Enviar cotización' : 'Selecciona formato y horario'}
+          {isWhatsAppReady ? 'Enviar cotización' : 'Selecciona tu horario'}
         </button>
       </div>
     </section>
