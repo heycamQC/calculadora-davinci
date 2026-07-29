@@ -171,7 +171,7 @@ ${cuotasRestantes > 0 ? `- Siguientes ${cuotasRestantes} cuotas: Bs. ${cuotaMens
 *TOTAL PARA EMPEZAR HOY:* Bs. ${primeraCuota}`;
     }
 
-    const mensaje = `¡Hola! Quiero cotizar mi inscripción en el Instituto Davinci:
+    const mensaje = `¡Hola! Quiero cotizar mi inscripción en Da Vinci Educativo:
 
 *IDIOMA:* ${dataIdioma?.nombre}
 *MODALIDAD:* ${dataModalidad?.nombre}
