@@ -166,6 +166,13 @@ h1, h2, h3,
   gap: 12px; 
   padding: 24px 20px; 
 }
+/* 1. SECCIÓN IDIOMAS: Grilla de 3x3 moderna y compacta */
+.grid-idiomas {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important; /* 3 columnas en PC/Tablets */
+  gap: 12px;
+  padding: 20px;
+}
 
 /* Grilla en exactamente 2 columnas para el paso de Idiomas y Formatos */
 .grid-2-col {
@@ -520,5 +527,92 @@ h1, h2, h3,
   .total-number {
     font-size: 1.8rem !important;
     line-height: 1;
+  }
+}
+
+/* ==========================================
+   TARJETAS DE IDIOMA CON IMAGEN PURA
+   ========================================== */
+.grid-2-col {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 12px;
+  padding: 20px;
+}
+
+.btn-idioma-img {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1; /* Mantiene la tarjeta perfectamente cuadrada y proporcional */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 3px solid #e5e7eb !important;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  padding: 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Capa de contraste sutil sobre la imagen para que el texto resalte siempre */
+.btn-idioma-img .btn-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.65) 100%);
+  z-index: 1;
+  transition: background 0.25s ease;
+}
+/* Tarjeta cuadrada perfecta para los idiomas con imagen */
+.btn-idioma-img {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1; 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 3px solid #e5e7eb !important;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  padding: 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.btn-idioma-img:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  border-color: var(--color-orange, #e8702a) !important;
+}
+
+.btn-idioma-img.is-selected {
+  border-color: var(--color-blue-active, #2b7af1) !important;
+  border-width: 4px !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(43, 122, 241, 0.3);
+}
+
+
+/* 2. SECCIÓN FORMATOS: Forzado a 1 columna y filas apiladas */
+.grid-formato {
+  display: grid !important;
+  grid-template-columns: 1fr !important; /* 1 sola columna vertical */
+  gap: 12px;
+  padding: 24px 20px;
+}
+
+
+/* 3. ADAPTABILIDAD PARA CELULARES (Pantallas menores a 480px) */
+@media (max-width: 480px) {
+  /* En celulares muy angostos bajamos los idiomas a 2 columnas para que no queden muy chiquitos */
+  .grid-idiomas {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px;
+    padding: 16px;
   }
 }

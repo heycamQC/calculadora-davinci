@@ -17,7 +17,7 @@ export default function StepFormato({dataIdioma, dataModalidad, selectedFormato,
         <span>¿Cómo prefieres asistir?</span>
       </div>
 
-      <div className="grid-2-col">
+      <div className="grid-formato">
         {dataModalidad.formatos.map((formato) => {
           const isSelected = selectedFormato === formato;
 
