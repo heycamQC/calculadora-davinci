@@ -1,9 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+/* ==========================================
+   1. IMPORTACIÓN DE FUENTES OFICIALES (MONTSERRAT + POPPINS)
+   ========================================== */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap');
 
 /* ==========================================
-   1. VARIABLES Y RESETEO
+   2. VARIABLES INSTITUCIONALES Y RESETEO BASE
    ========================================== */
 :root {
+  /* Colores de marca y navegación */
   --color-orange: #e8702a;
   --color-blue-active: #2b7af1;
   --color-blue-bg: #eaf3ff;
@@ -17,7 +21,11 @@
   --color-whatsapp-hover: #1fba59;
   --color-nav-bg: #a8b0b9;
   --color-nav-disabled: #d1d5db;
+  --color: #d9bb24;
+  --color: #c52b80;
+  --color: #af7bbc;
   
+  /* Radios y bordes estilizados */
   --radius-card: 28px;
   --radius-btn: 14px;
 }
@@ -26,6 +34,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  /* Poppins como fuente base de lectura limpia */
   font-family: 'Poppins', system-ui, -apple-system, sans-serif;
 }
 
@@ -34,8 +43,17 @@ body {
   color: var(--color-text-dark);
 }
 
+/* Títulos, encabezados y destacados usan Montserrat según la guía gráfica */
+h1, h2, h3, 
+.btn-title, 
+.banner-orange h2, 
+.wizard-header h1 {
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: 0.5px;
+}
+
 /* ==========================================
-   2. CONTENEDOR PRINCIPAL
+   3. CONTENEDOR PRINCIPAL Y WIZARD CARD
    ========================================== */
 .app-wrapper {
   min-height: 100vh;
@@ -78,7 +96,7 @@ body {
 }
 
 /* ==========================================
-   3. BANNERS Y SECCIONES
+   4. SECCIONES, ENCABEZADOS Y BANNERS DE COLOR
    ========================================== */
 .step-container {
   flex: 1;
@@ -86,6 +104,25 @@ body {
   flex-direction: column;
 }
 
+/* Título superior de pasos en pantallas blancas (Ej. "IDIOMA", "FORMATO") */
+.step-container > h2 {
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+  color: var(--color-text-dark, #1f2937) !important;
+  text-align: center;
+  margin-top: 16px;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.step-subtitle {
+  text-align: center;
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+  margin-bottom: 4px;
+}
+
+/* Banners de color institucionales (Ej. Modalidades con morado o naranja) */
 .banner-orange {
   background-color: var(--color-orange);
   color: #ffffff;
@@ -94,25 +131,49 @@ body {
   transition: background-color 0.3s ease;
 }
 
-.banner-orange h2 {
-  font-size: 1.3rem;
-  font-weight: 800;
+.banner-orange h2,
+[class*="banner-"] h2 {
+  color: #ffffff !important;
+  font-weight: 100 !important;
+  font-size: 1.3rem !important;
   letter-spacing: 1px;
   text-transform: uppercase;
   margin-bottom: 4px;
 }
 
-.banner-orange span {
-  font-size: 0.85rem;
+.banner-orange span,
+[class*="banner-"] span {
+  color: #ffffff !important;
   opacity: 0.95;
+  font-family: 'Poppins', sans-serif;
   font-weight: 400;
+  font-size: 0.88rem;
 }
 
 /* ==========================================
-   4. GRILLAS PRINCIPALES
+   5. GRILLAS Y BOTONES DE SELECCIÓN (ESTILO DAVINCI)
    ========================================== */
-.grid-3-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 24px 20px; }
-.grid-1-col { display: grid; grid-template-columns: 1fr; gap: 12px; padding: 24px 20px; }
+.grid-3-cols { 
+  display: grid; 
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 12px; 
+  padding: 24px 20px; 
+}
+
+.grid-1-col { 
+  display: grid; 
+  grid-template-columns: 1fr; 
+  gap: 12px; 
+  padding: 24px 20px; 
+}
+
+/* Grilla en exactamente 2 columnas para el paso de Idiomas y Formatos */
+.grid-2-col {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 14px;
+  padding: 24px 20px;
+}
 
 .option-btn {
   background-color: var(--color-btn-default);
@@ -120,7 +181,7 @@ body {
   border-radius: var(--radius-btn);
   padding: 16px 10px;
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 200;
   color: var(--color-text-dark);
   cursor: pointer;
   transition: all 0.2s;
@@ -128,9 +189,12 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
-.option-btn:hover { background-color: var(--color-btn-hover); }
+.option-btn:hover { 
+  background-color: var(--color-btn-hover); 
+}
 
 .option-btn.is-selected {
   background-color: var(--color-blue-bg);
@@ -138,15 +202,83 @@ body {
   color: var(--color-blue-active);
 }
 
-.btn-large { padding: 18px 16px; }
-.btn-title { font-size: 1.05rem; margin-bottom: 4px; }
-.btn-subtitle { font-size: 0.82rem; color: var(--color-text-muted); font-weight: 400; }
-.option-btn.is-selected .btn-subtitle { color: var(--color-blue-active); }
-.btn-price { font-size: 1.1rem; font-weight: 800; color: var(--color-orange); margin: 4px 0; }
-.btn-desc { font-size: 0.78rem; color: var(--color-text-muted); font-weight: 400; line-height: 1.2; }
+/* ==========================================
+   BOTONES DE IDIOMA MÁS LLAMATIVOS (RELLENO PASTEL DESDE EL INICIO)
+   ========================================== */
+.btn-idioma {
+  /* Fondo tintado permanente (10% de opacidad del color del idioma) */
+  background-color: color-mix(in srgb, var(--idioma-color, #e8702a) 10%, #ffffff) !important;
+  border: 2px solid var(--idioma-color, #e5e7eb) !important;
+  border-radius: var(--radius-btn);
+  padding: 16px 12px;
+  color: #1f2937;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+/* Hover: El color se vuelve más vivo y se eleva la tarjeta */
+.btn-idioma:hover {
+  background-color: color-mix(in srgb, var(--idioma-color, #e8702a) 20%, #ffffff) !important;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Seleccionado: El borde se engrosa, el color resalta más y el texto se vuelve extragrueso */
+.btn-idioma.is-selected {
+  background-color: color-mix(in srgb, var(--idioma-color, #e8702a) 25%, #ffffff) !important;
+  border-width: 3px !important;
+  color: #000000;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.btn-idioma.is-selected strong {
+  font-weight: 800 !important;
+}
+
+.btn-large { 
+  padding: 18px 16px; 
+}
+
+/* Tipografía de títulos interna de botones (Montserrat limpia y equilibrada) */
+.btn-title,
+.option-btn strong {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 100 !important;
+  font-size: 1.02rem;
+  margin-bottom: 4px;
+}
+
+.btn-subtitle { 
+  font-size: 0.82rem; 
+  color: var(--color-text-muted); 
+  font-weight: 400; 
+}
+
+.option-btn.is-selected .btn-subtitle { 
+  color: var(--color-blue-active); 
+}
+
+.btn-price { 
+  font-size: 1.1rem; 
+  font-weight: 800; 
+  color: var(--color-orange); 
+  margin: 4px 0; 
+}
+
+.btn-desc { 
+  font-size: 0.78rem; 
+  color: var(--color-text-muted); 
+  font-weight: 400; 
+  line-height: 1.2; 
+}
 
 /* ==========================================
-   5. RESUMEN Y DESGLOSE DE PRECIOS
+   6. RESUMEN DE COTIZACIÓN Y DESGLOSE
    ========================================== */
 .summary-box {
   padding: 24px 20px;
@@ -155,7 +287,7 @@ body {
   gap: 16px;
 }
 
-/* Nueva caja tipo recibo */
+/* Caja de desglose estilo recibo de matrícula */
 .summary-breakdown {
   background-color: #f8fafc;
   border: 1px solid #e2e8f0;
@@ -189,6 +321,7 @@ body {
 }
 
 .breakdown-total .total-number {
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.6rem;
   color: var(--color-orange);
   font-weight: 900;
@@ -202,7 +335,7 @@ body {
   margin-top: 8px;
 }
 
-/* Área de los formatos y horarios (Chips) */
+/* Selector de Horarios en chips en la pantalla final */
 .summary-options {
   border-top: 2px solid #e5e7eb;
   padding-top: 16px;
@@ -210,13 +343,15 @@ body {
 
 .options-title {
   font-size: 0.95rem;
-  font-weight: 700;
+  font-weight: 400;
   color: var(--color-text-dark);
   margin-bottom: 12px;
   text-align: center;
 }
 
-.option-group { margin-bottom: 16px; }
+.option-group { 
+  margin-bottom: 16px; 
+}
 
 .option-group label {
   display: block;
@@ -226,7 +361,11 @@ body {
   margin-bottom: 8px;
 }
 
-.chips-container { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips-container { 
+  display: flex; 
+  flex-wrap: wrap; 
+  gap: 8px; 
+}
 
 .chip-btn {
   background-color: var(--color-btn-default);
@@ -248,7 +387,23 @@ body {
   color: var(--color-blue-active);
 }
 
-/* Botón WhatsApp */
+/* Caja amarilla informativa (Ej. Rangos One to One) */
+.range-info-box {
+  background-color: #fff3cd;
+  border: 1px solid #ffeeba;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  color: #856404;
+  font-size: 0.9rem;
+}
+
+.range-info-box p {
+  margin: 5px 0;
+  font-weight: 600;
+}
+
+/* Botón flotante y CTA de WhatsApp */
 .btn-whatsapp {
   background-color: #a8b0b9;
   color: #ffffff;
@@ -275,71 +430,93 @@ body {
 }
 
 /* ==========================================
-   6. FOOTER NAVEGACIÓN
+   7. FOOTER DE NAVEGACIÓN Y ACCIONES ("<", ">")
    ========================================== */
-.wizard-footer { display: flex; border-top: 3px solid #111111; margin-top: auto; }
+.wizard-footer { 
+  display: flex; 
+  border-top: 3px solid #111111; 
+  margin-top: auto; 
+}
+
 .nav-arrow {
-  flex: 1; background-color: var(--color-nav-bg); color: #ffffff; border: none;
-  padding: 14px 0; font-size: 2rem; font-weight: 300; line-height: 1; cursor: pointer; transition: background-color 0.2s;
-}
-.nav-arrow:first-child { border-right: 2px solid #ffffff; }
-.nav-arrow:hover:not(:disabled) { background-color: #8f98a3; }
-.nav-arrow:disabled { background-color: var(--color-nav-disabled); color: #f3f4f6; cursor: not-allowed; }
-
-.range-info-box {
-  background-color: #fff3cd; /* Un tono amarillo suave */
-  border: 1px solid #ffeeba;
-  padding: 15px;
-  border-radius: 8px;
-  text-align: center;
-  color: #856404;
-  font-size: 0.9rem;
+  flex: 1; 
+  background-color: var(--color-nav-bg); 
+  color: #ffffff; 
+  border: none;
+  padding: 14px 0; 
+  font-size: 2rem; 
+  font-weight: 300; 
+  line-height: 1; 
+  cursor: pointer; 
+  transition: background-color 0.2s;
 }
 
-.range-info-box p {
-  margin: 5px 0;
-  font-weight: 600;
+.nav-arrow:first-child { 
+  border-right: 2px solid #ffffff; 
 }
+
+.nav-arrow:hover:not(:disabled) { 
+  background-color: #8f98a3; 
+}
+
+.nav-arrow:disabled { 
+  background-color: var(--color-nav-disabled); 
+  color: #f3f4f6; 
+  cursor: not-allowed; 
+}
+
 /* ==========================================
-   7. ANIMACIONES
+   8. ANIMACIONES Y TRANSICIONES SUAVES
    ========================================== */
-.fade-in { animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in { 
+  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
+}
 
-/* 📱 AJUSTES RESPONSIVOS PARA EL RESUMEN EN MÓVILES */
+@keyframes fadeIn { 
+  from { 
+    opacity: 0; 
+    transform: translateY(8px); 
+  } 
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  } 
+}
+
+/* ==========================================
+   9. MEDIA QUERIES (RESPONSIVIDAD CELULAR)
+   ========================================== */
 @media (max-width: 500px) {
-  /* Hacemos que las filas se apilen verticalmente */
+  /* Apila de forma vertical las filas del desglose en pantallas estrechas */
   .breakdown-row {
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Alinea el texto a la izquierda */
-    gap: 6px; /* Espacio entre el texto y el precio */
+    align-items: flex-start;
+    gap: 6px;
     margin-bottom: 16px;
   }
 
-  /* Ajustamos el tamaño del texto para que respire */
   .breakdown-row span {
     font-size: 0.95rem;
     line-height: 1.3;
   }
 
-  /* Tiramos el precio hacia la derecha para estilo "recibo" */
+  /* El monto en precio se alinea al margen derecho tipo factura */
   .breakdown-row strong {
     align-self: flex-end; 
     font-size: 1.15rem;
   }
 
-  /* Ajustes para la caja del TOTAL */
   .breakdown-total {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centramos todo en el total */
+    align-items: center;
     gap: 8px;
     text-align: center;
     padding-top: 15px;
   }
 
-  /* Controlamos el tamaño del número gigante para que no rompa la caja */
+  /* Mantiene los números grandes en su caja sin desbordar la pantalla */
   .total-number {
     font-size: 1.8rem !important;
     line-height: 1;

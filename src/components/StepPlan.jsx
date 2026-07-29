@@ -1,5 +1,5 @@
 // src/components/StepPlan.jsx
-export default function StepPlan({ dataModalidad, selectedFormato, selectedPlan, onSelectPlan }) {
+export default function StepPlan({ dataIdioma ,dataModalidad, selectedFormato, selectedPlan, onSelectPlan }) {
   if (!dataModalidad) return null;
 
   const planesFiltrados = dataModalidad.planes.filter(plan => {
@@ -16,7 +16,10 @@ export default function StepPlan({ dataModalidad, selectedFormato, selectedPlan,
 
   return (
     <section className="step-container fade-in">
-      <div className="banner-orange">
+      <div 
+        className="banner-orange"
+        style={{ backgroundColor: dataIdioma.colorTema || '#e8702a' }}
+      >
         <h2>PLAN DE PAGO</h2>
         <span>Elige tu plan ({selectedFormato})</span>
       </div>

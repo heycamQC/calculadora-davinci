@@ -59,7 +59,7 @@ function App() {
 
         {step === 0 && (
           <StepIdioma 
-            pricingData={pricingData} 
+            data={pricingData}
             selectedIdioma={selections.idioma} 
             onSelectIdioma={handleSelectIdioma} 
           />
@@ -69,24 +69,26 @@ function App() {
           <StepModalidad 
             dataIdioma={dataIdioma} 
             selectedModalidad={selections.modalidad} 
-            onSelectModalidad={handleSelectModalidad} 
+            onSelectModalidad={handleSelectModalidad}
           />
         )}
 
         {step === 2 && (
           <StepFormato 
             dataModalidad={dataModalidad} 
+            dataIdioma={dataIdioma} 
             selectedFormato={selections.formato} 
-            onSelectFormato={handleSelectFormato} 
+            onSelectFormato={handleSelectFormato}
           />
         )}
 
         {step === 3 && (
           <StepPlan 
             dataModalidad={dataModalidad} 
+            dataIdioma={dataIdioma} 
             selectedFormato={selections.formato}
             selectedPlan={selections.plan} 
-            onSelectPlan={handleSelectPlan} 
+            onSelectPlan={handleSelectPlan}
           />
         )}
 

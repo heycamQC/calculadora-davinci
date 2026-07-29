@@ -32,55 +32,72 @@ const transformData = (rows) => {
   rows.forEach(row => {
     const { 
       idioma_id, idioma_nombre, color, matricula, 
-      modalidad_id, modalidad_nombre, duracion, formatos, horarios, 
+      modalidad_id, modalidad_nombre, activo, duracion, formatos, horarios, 
       plan_id, plan_nombre, es_por_hora,
       cuotas_cantidad, primera_cuota_regular, cuota_monto_regular,
       en_promocion, etiqueta_promo, primera_cuota_promo, cuota_monto_promo
     } = row;
 
-    if (!data[idioma_id]) {
-      data[idioma_id] = {
-        nombre: idioma_nombre, colorTema: color, matricula: Number(matricula), modalidades: {}
+    // 🚀 FILTRO ACTIVO:
+    // Soportamos TRUE/FALSE, VERDADERO/FALSO y celdas en blanco por defecto
+    const valActivo = activo?.toString().trim().toUpperCase();
+    const estaActivo = valActivo === undefined || valActivo === '' || 
+                       valActivo === 'TRUE' || valActivo === 'VERDADERO';
+                       
+    if (!estaActivo) return;
+
+    // 🔑 CLAVE DE BÚSQUEDA NORMALIZADA:
+    // Guardamos usando el nombre del idioma como clave primaria (o el id de respaldo)
+    // para que coincida exactamente con lo que el usuario selecciona en la interfaz
+    const keyIdioma = idioma_nombre || idioma_id;
+
+    if (!data[keyIdioma]) {
+      data[keyIdioma] = {
+        id: idioma_id,
+        nombre: idioma_nombre, 
+        colorTema: color || '#e8702a', 
+        matricula: Number(matricula) || 0, 
+        modalidades: {}
       };
     }
 
-    if (!data[idioma_id].modalidades[modalidad_id]) {
-      data[idioma_id].modalidades[modalidad_id] = {
+    if (!data[keyIdioma].modalidades[modalidad_id]) {
+      data[keyIdioma].modalidades[modalidad_id] = {
         nombre: modalidad_nombre,
-        duracion: duracion,
+        duracion: duracion || '',
         formatos: new Set(),
         horarios: new Set(),
         planes: []
       };
     }
 
-    // Filtro de Formatos (Mantenemos la lógica limpia)
+    // Filtro de Formatos
     if (modalidad_id === 'estandar' || modalidad_id === 'intensivo') {
-      data[idioma_id].modalidades[modalidad_id].formatos.add('Presencial / Híbrido');
-      data[idioma_id].modalidades[modalidad_id].formatos.add('Virtual');
+      data[keyIdioma].modalidades[modalidad_id].formatos.add('Presencial / Híbrido');
+      data[keyIdioma].modalidades[modalidad_id].formatos.add('Virtual');
     } else if (formatos) {
       formatos.split(',').forEach(f => {
-        if (f.trim()) data[idioma_id].modalidades[modalidad_id].formatos.add(f.trim());
+        if (f.trim()) data[keyIdioma].modalidades[modalidad_id].formatos.add(f.trim());
       });
     }
 
-    // 🛠️ LECTOR DE HORARIOS 
-    // Lee saltos de línea (Enter en la celda) y barras verticales (|) 
+    // Lector de Horarios (Soporta saltos de línea y pipes "|")
     if (horarios) {
       const horariosLimpios = horarios.replace(/\r?\n/g, '|'); 
       horariosLimpios.split('|').forEach(h => {
-        if (h.trim()) data[idioma_id].modalidades[modalidad_id].horarios.add(h.trim());
+        if (h.trim()) data[keyIdioma].modalidades[modalidad_id].horarios.add(h.trim());
       });
     }
 
+    // Registro del Plan
     if (plan_id && plan_nombre) {
-      data[idioma_id].modalidades[modalidad_id].planes.push({
+      data[keyIdioma].modalidades[modalidad_id].planes.push({
         id: plan_id,
         nombre: plan_nombre,
         precio: Number(cuota_monto_regular) || 0, 
-        esPorHora: es_por_hora?.toLowerCase() === 'true' || es_por_hora?.toLowerCase() === 'verdadero',
+        esPorHora: es_por_hora?.toString().toUpperCase() === 'TRUE' || es_por_hora?.toString().toUpperCase() === 'VERDADERO',
         formatosAplica: formatos || '', 
-        enPromocion: en_promocion?.toUpperCase() === 'TRUE',
+        enPromocion: en_promocion?.toString().toUpperCase() === 'TRUE' || en_promocion?.toString().toUpperCase() === 'VERDADERO',
         etiquetaPromo: etiqueta_promo || '',
         cuotasCantidad: Number(cuotas_cantidad) || 1,
         primeraCuotaRegular: Number(primera_cuota_regular) || 0,
@@ -91,6 +108,7 @@ const transformData = (rows) => {
     }
   });
 
+  // Convertimos todos los Sets en Arrays al terminar
   Object.values(data).forEach(idioma => {
     Object.values(idioma.modalidades).forEach(mod => {
       mod.formatos = Array.from(mod.formatos);

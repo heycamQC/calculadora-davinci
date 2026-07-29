@@ -1,24 +1,37 @@
-export default function StepModalidad({ dataIdioma, selectedModalidad, onSelectModalidad }) {
+// src/components/StepModalidad.jsx
+export default function StepModalidad({ dataIdioma, selectedModalidad, onSelectModalidad, onAutoNext }) {
   if (!dataIdioma) return null;
+
+  const handleSelect = (modKey, modValue) => {
+    onSelectModalidad(modKey, modValue);
+    setTimeout(() => {
+      if (onAutoNext) onAutoNext();
+    }, 300);
+  };
 
   return (
     <section className="step-container fade-in">
-      <div className="banner-orange">
+      <div 
+        className="banner-orange"
+        style={{ backgroundColor: dataIdioma.colorTema || '#e8702a' }}
+      >
         <h2>MODALIDAD</h2>
-        <span>Selecciona tu ritmo de estudio</span>
+        <span>Elige el ritmo de estudio ({dataIdioma.nombre})</span>
       </div>
+
       <div className="grid-1-col">
-        {Object.keys(dataIdioma.modalidades).map((key) => {
-          const mod = dataIdioma.modalidades[key];
+        {Object.entries(dataIdioma.modalidades).map(([modKey, modValue]) => {
+          const isSelected = selectedModalidad?.key === modKey;
+
           return (
             <button
-              key={key}
+              key={modKey}
               type="button"
-              className={`option-btn btn-large ${selectedModalidad === key ? 'is-selected' : ''}`}
-              onClick={() => onSelectModalidad(key)}
+              className={`option-btn btn-large ${isSelected ? 'is-selected' : ''}`}
+              onClick={() => handleSelect(modKey, modValue)}
             >
-              <strong className="btn-title">{mod.nombre}</strong>
-              <span className="btn-subtitle">{mod.duracion}</span>
+              <strong className="btn-title">{modValue.nombre}</strong>
+              {modValue.duracion && <span className="btn-desc">{modValue.duracion}</span>}
             </button>
           );
         })}
