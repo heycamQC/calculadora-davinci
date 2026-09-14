@@ -616,3 +616,31 @@ h1, h2, h3,
     padding: 16px;
   }
 }
+
+/* SECCION DISPONIBILIDAD DE CUPOS */
+/* ========================================== */
+.cupos-iframe-container {
+  margin-top: 8px;
+  border: 2px solid var(--color-blue-active);
+  border-radius: 14px;
+  overflow: hidden;
+  background-color: transparent !important; /* 👈 Esto elimina ese marco oscuro alrededor */
+  box-shadow: 0 8px 24px rgba(43, 122, 241, 0.15);
+  height: 310px; 
+  position: relative;
+}
+.cupos-iframe {
+  /* 2. Le decimos al iframe que mida EL DOBLE de ancho de su contenedor 
+        (para obligarlo a mostrar el diseño de PC) */
+  width: 200%; 
+  height: 700px; /* El doble de alto para que renderice todo sin cortarse */
+  border: none;
+  
+  /* 3. El Truco de Magia: Lo encogemos a la mitad (50%) */
+  transform: scale(0.5);
+  transform-origin: top left; /* Que se encoja desde la esquina superior izquierda */
+  
+  position: absolute;
+  top: 0;
+  left: 0;
+}

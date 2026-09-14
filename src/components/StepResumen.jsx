@@ -1,4 +1,6 @@
 // src/components/StepResumen.jsx
+import { useState } from 'react';
+import { useHorarios } from '../hooks/useHorarios'; 
 export default function StepResumen({
   dataIdioma,
   dataModalidad,
@@ -7,6 +9,12 @@ export default function StepResumen({
   onSelectHorario,
   onEnviarWhatsApp,
 }) {
+  // Estado para el acordeón de cupos
+  const [showCupos, setShowCupos] = useState(false);
+
+  // Obtenemos los horarios directamente desde la fuente centralizada de cupos
+  const { horarios } = useHorarios();
+
   if (!dataIdioma || !selections.plan) return null;
 
   const plan = selections.plan;
@@ -24,6 +32,33 @@ export default function StepResumen({
   const totalCuotas = Number(plan.cuotasCantidad || 1);
   const cuotasRestantes = totalCuotas - 1;
 
+  // 🚀 LÓGICA INTELIGENTE PARA LA URL DE CUPOS
+  const idiomaKey = dataIdioma?.id || selections.idioma?.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") || '';
+  const modalidadNombre = dataModalidad?.nombre || '';
+  const planKey = modalidadNombre.toLowerCase().includes('intensivo') ? 'intensivo' : 'estandar';
+  const cuposUrl = `https://disponibilidad-cupos.vercel.app/?idioma=${idiomaKey}&plan=${planKey}`;
+
+  // 🚀 FILTRADO DINÁMICO DE HORARIOS DESDE EL CSV DE CUPOS
+  const normalizar = (txt) => String(txt || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+
+  // 1. Filtrar por el idioma seleccionado
+  const horariosDelIdioma = horarios.filter(h => 
+    h.Idioma && normalizar(h.Idioma) === normalizar(dataIdioma.nombre) && h.Estado !== 'Inactivo'
+  );
+
+  // 2. Filtrar por la modalidad (Estándar o Intensivo)
+  const horariosFiltradosPorModalidad = horariosDelIdioma.filter(h => {
+    if (!h.Modalidad) return false;
+    const modH = normalizar(h.Modalidad);
+    if (planKey === 'intensivo') {
+      return modH.includes('intensivo');
+    } else {
+      return modH.includes('estandar');
+    }
+  });
+
+  // 3. Extraer la lista de horarios disponibles (asegúrate de que en tu CSV de cupos la columna se llame 'Horario' o ajusta aquí)
+  const listaHorariosDisponibles = horariosFiltradosPorModalidad.map(h => h.Horario || h.horario || h.Texto || Object.values(h)[3]);
   return (
     <section className="step-container fade-in">
       <div 
@@ -101,20 +136,68 @@ export default function StepResumen({
               </div>
             ) : (
               <div className="chips-container">
-                {dataModalidad?.horarios.map(horario => (
-                  <button 
-                    key={horario} 
-                    type="button"
-                    className={`chip-btn ${selections.horario === horario ? 'is-selected' : ''}`}
-                    onClick={() => onSelectHorario(horario)}
-                  >
-                    {horario}
-                  </button>
-                ))}
+                {listaHorariosDisponibles.length > 0 ? (
+                  listaHorariosDisponibles.map(horario => (
+                    <button 
+                      key={horario} 
+                      type="button"
+                      className={`chip-btn ${selections.horario === horario ? 'is-selected' : ''}`}
+                      onClick={() => onSelectHorario(horario)}
+                    >
+                      {horario}
+                    </button>
+                  ))
+                ) : (
+                  <p style={{ fontSize: '0.9rem', color: '#666', textAlign: 'center', width: '100%' }}>
+                    Cargando horarios disponibles...
+                  </p>
+                )}
               </div>
             )}
           </div>
         </div>
+
+        {/* ==========================================
+            SECCIÓN: INTEGRACIÓN DE CUPOS EN VIVO
+            ========================================== */}
+        {!esPorHora && selections.modalidad !== 'onetoone' && (
+          <div style={{ marginTop: '8px', marginBottom: '8px', borderTop: '2px solid #e5e7eb', paddingTop: '16px' }}>
+            <button 
+              type="button"
+              onClick={() => setShowCupos(!showCupos)}
+              style={{
+                width: '100%',
+                padding: '14px 16px',
+                backgroundColor: showCupos ? 'var(--color-blue-bg)' : '#f8fafc',
+                border: `2px solid ${showCupos ? 'var(--color-blue-active)' : '#cbd5e1'}`,
+                borderRadius: '14px',
+                color: showCupos ? 'var(--color-blue-active)' : 'var(--color-text-dark)',
+                fontFamily: 'Montserrat, sans-serif',
+                fontWeight: '700',
+                cursor: 'pointer',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                transition: 'all 0.2s ease-in-out',
+                fontSize: '0.95rem'
+              }}
+            >
+              <span>📅 Ver cupos: {dataIdioma.nombre} ({planKey === 'intensivo' ? 'Intensivo' : 'Estándar'})</span>
+              <span>{showCupos ? '▲ Ocultar' : '▼ Consultar'}</span>
+            </button>
+
+            {showCupos && (
+              <div className="fade-in cupos-iframe-container">
+                <iframe 
+                  src={cuposUrl} 
+                  title="Disponibilidad de Cupos"
+                  className="cupos-iframe"
+                />
+              </div>
+            )}
+          </div>
+        )}
+        {/* ========================================== */}
 
         <button 
           type="button" 
