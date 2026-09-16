@@ -1,7 +1,7 @@
 // src/services/sheetsService.js
 import Papa from 'papaparse';
 
-const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT6Omq3fpy10yeYWVhnXJa_AezIVDahPqAPFR-En60vVtFe73tBbD_cAVDuLsATsOjEQLRuV3siovpK/pub?output=csv";
+const SHEET_CSV_URL = import.meta.env.VITE_SHEET_CSV_URL;
 
 export const fetchPricingData = () => {
   return new Promise((resolve, reject) => {
@@ -38,17 +38,14 @@ const transformData = (rows) => {
       en_promocion, etiqueta_promo, primera_cuota_promo, cuota_monto_promo
     } = row;
 
-    // 🚀 FILTRO ACTIVO:
-    // Soportamos TRUE/FALSE, VERDADERO/FALSO y celdas en blanco por defecto
+ 
     const valActivo = activo?.toString().trim().toUpperCase();
     const estaActivo = valActivo === undefined || valActivo === '' || 
                        valActivo === 'TRUE' || valActivo === 'VERDADERO';
                        
     if (!estaActivo) return;
 
-    // 🔑 CLAVE DE BÚSQUEDA NORMALIZADA:
-    // Guardamos usando el nombre del idioma como clave primaria (o el id de respaldo)
-    // para que coincida exactamente con lo que el usuario selecciona en la interfaz
+
     const keyIdioma = idioma_nombre || idioma_id;
 
     if (!data[keyIdioma]) {
@@ -81,7 +78,7 @@ const transformData = (rows) => {
       });
     }
 
-    // Lector de Horarios (Soporta saltos de línea y pipes "|")
+    // Lector de Horarios 
     if (horarios) {
       const horariosLimpios = horarios.replace(/\r?\n/g, '|'); 
       horariosLimpios.split('|').forEach(h => {
@@ -108,7 +105,7 @@ const transformData = (rows) => {
     }
   });
 
-  // Convertimos todos los Sets en Arrays al terminar
+
   Object.values(data).forEach(idioma => {
     Object.values(idioma.modalidades).forEach(mod => {
       mod.formatos = Array.from(mod.formatos);

@@ -13,14 +13,12 @@ export default function StepIdioma({ data, selectedIdioma, onSelectIdioma }) {
           const cleanName = (idioma.id || keyId)
             .toLowerCase()
             .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, ""); // Borra tildes (ej: "inglés" -> "ingles")
-
+            .replace(/[\u0300-\u036f]/g, ""); 
           return (
             <button
               key={keyId}
               type="button"
               className={`option-btn btn-idioma-img ${isSelected ? 'is-selected' : ''}`}
-              /* Probamos primero con .jpeg y si tienes alguna .jpg funcionará igual o estandarizamos */
               style={{ backgroundImage: `url('/images/${cleanName}.jpeg')` }}
               onClick={() => onSelectIdioma(idioma.nombre)}
             >

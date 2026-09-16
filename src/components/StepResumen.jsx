@@ -9,10 +9,8 @@ export default function StepResumen({
   onSelectHorario,
   onEnviarWhatsApp,
 }) {
-  // Estado para el acordeón de cupos
   const [showCupos, setShowCupos] = useState(false);
 
-  // Obtenemos los horarios directamente desde la fuente centralizada de cupos
   const { horarios } = useHorarios();
 
   if (!dataIdioma || !selections.plan) return null;
@@ -32,21 +30,17 @@ export default function StepResumen({
   const totalCuotas = Number(plan.cuotasCantidad || 1);
   const cuotasRestantes = totalCuotas - 1;
 
-  // 🚀 LÓGICA INTELIGENTE PARA LA URL DE CUPOS
   const idiomaKey = dataIdioma?.id || selections.idioma?.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") || '';
   const modalidadNombre = dataModalidad?.nombre || '';
   const planKey = modalidadNombre.toLowerCase().includes('intensivo') ? 'intensivo' : 'estandar';
   const cuposUrl = `https://disponibilidad-cupos.vercel.app/?idioma=${idiomaKey}&plan=${planKey}`;
 
-  // 🚀 FILTRADO DINÁMICO DE HORARIOS DESDE EL CSV DE CUPOS
   const normalizar = (txt) => String(txt || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
 
-  // 1. Filtrar por el idioma seleccionado
   const horariosDelIdioma = horarios.filter(h => 
     h.Idioma && normalizar(h.Idioma) === normalizar(dataIdioma.nombre) && h.Estado !== 'Inactivo'
   );
 
-  // 2. Filtrar por la modalidad (Estándar o Intensivo)
   const horariosFiltradosPorModalidad = horariosDelIdioma.filter(h => {
     if (!h.Modalidad) return false;
     const modH = normalizar(h.Modalidad);
@@ -57,7 +51,6 @@ export default function StepResumen({
     }
   });
 
-  // 3. Extraer la lista de horarios disponibles (asegúrate de que en tu CSV de cupos la columna se llame 'Horario' o ajusta aquí)
   const listaHorariosDisponibles = horariosFiltradosPorModalidad.map(h => h.Horario || h.horario || h.Texto || Object.values(h)[3]);
   return (
     <section className="step-container fade-in">

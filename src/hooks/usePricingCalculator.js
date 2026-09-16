@@ -31,7 +31,6 @@ export function usePricingCalculator() {
     loadData();
   }, []);
 
-  // 1️⃣ SELECCIÓN CON AVANCE SEGURO Y TRANSICIÓN SUAVE (Sin rebotes de useEffect)
   const handleSelectIdioma = (idioma) => {
     const nombreIdioma = typeof idioma === 'object' ? idioma.nombre : idioma;
     setSelections({
@@ -86,15 +85,13 @@ export function usePricingCalculator() {
     setSelections((prev) => ({ ...prev, horario }));
   };
 
-  // 2️⃣ NAVEGACIÓN INTELIGENTE (Solución al botón "Atrás")
   const handleNext = () => {
     if (step < 4) setStep((prev) => prev + 1);
   };
 
   const handlePrev = () => {
     if (step > 0) {
-      // Limpiamos la selección del paso al que estamos regresando
-      // para que el usuario pueda elegir tranquilamente sin que el sistema lo reubique solo.
+
       setSelections((prev) => {
         const reset = { ...prev };
         if (step === 1) reset.idioma = '';
@@ -107,7 +104,6 @@ export function usePricingCalculator() {
     }
   };
 
-  // 3️⃣ VALIDACIÓN DE BOTONES
   const isNextDisabled = () => {
     if (step === 0 && !selections.idioma) return true;
     if (step === 1 && !selections.modalidad) return true;
@@ -117,13 +113,11 @@ export function usePricingCalculator() {
     return false;
   };
 
-  // 4️⃣ LECTURA SEGURA DE DATOS
   const dataIdioma = selections.idioma ? pricingData?.[selections.idioma] : null;
   const modalKey = selections.modalidad?.key || selections.modalidad;
   const dataModalidad = dataIdioma?.modalidades?.[modalKey];
   const isWhatsAppReady = selections.horario !== '';
 
-  // 5️⃣ GENERADOR DE MENSAJE WHATSAPP
   const enviarWhatsApp = () => {
     const telefono = "59169782201";
     const plan = selections.plan;
